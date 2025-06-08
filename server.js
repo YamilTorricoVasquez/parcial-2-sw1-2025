@@ -19,6 +19,13 @@ app.use(express.static('public')); // Serve static files
 app.use(express.json()); // Parse JSON bodies for API endpoints
 
 // PostgreSQL connection
+// const pool = new Pool({
+//   user: 'postgres',
+//   host: 'localhost',
+//   database: 'test5',
+//   password: '1234',
+//   port: 5432,
+// });
 const pool = new Pool({
   user: 'grupo22sc',
   host: 'mail.tecnoweb.org.bo',
@@ -26,7 +33,6 @@ const pool = new Pool({
   password: 'grup022grup022*',
   port: 5432,
 });
-
 // Create tables if they don't exist
 async function initializeDatabase() {
   try {
