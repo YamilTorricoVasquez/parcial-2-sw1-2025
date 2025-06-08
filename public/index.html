@@ -167,7 +167,7 @@
       useEffect(() => {
         const fetchRooms = async () => {
           try {
-            const response = await fetch('http://localhost:3000/api/rooms');
+            const response = await fetch('https://parcial-2-sw1-2025.onrender.com/api/rooms');
             const data = await response.json();
             if (Array.isArray(data)) {
               setRooms(data);
@@ -183,7 +183,7 @@
 
       const createRoom = async () => {
         try {
-          const response = await fetch('http://localhost:3000/api/rooms', {
+          const response = await fetch('https://parcial-2-sw1-2025.onrender.com/api/rooms', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: roomName, password: createPassword || null }),
@@ -201,7 +201,7 @@
 
       const joinRoom = async () => {
         try {
-          const response = await fetch('http://localhost:3000/api/rooms/join', {
+          const response = await fetch('https://parcial-2-sw1-2025.onrender.com/api/rooms/join', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ roomName: selectedRoom.name, password: joinPassword || null }),
@@ -534,7 +534,7 @@
 
       useEffect(() => {
         if (roomName) {
-          socketRef.current = io('http://localhost:3000', {
+          socketRef.current = io('https://parcial-2-sw1-2025.onrender.com', {
             auth: { roomName, password },
           });
 
