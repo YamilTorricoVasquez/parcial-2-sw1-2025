@@ -13,22 +13,40 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     .canvas {
-      background: #f0f0f0;
+      background: linear-gradient(135deg, #e5e7eb, #f3f4f6);
       position: relative;
       overflow: hidden;
-      border: 2px solid #000;
+      border: 2px solid #1f2937;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: border-color 0.3s ease;
     }
 
     .component {
       position: absolute;
       cursor: move;
       user-select: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .sidebar {
+    .component:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .sidebar,
+    .right-sidebar {
       width: 250px;
-      background: #fff;
-      border-right: 1px solid #ddd;
+      background: #ffffff;
+      border-right: 1px solid #e5e7eb;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+      transition: background-color 0.3s ease;
+    }
+
+    .right-sidebar {
+      border-left: 1px solid #e5e7eb;
+      border-right: none;
+      box-shadow: -2px 0 8px rgba(0, 0, 0, 0.05);
     }
 
     .appbar {
@@ -36,6 +54,11 @@
       top: 0;
       left: 0;
       z-index: 10;
+      background: #3b82f6;
+      color: #ffffff;
+      padding: 12px 16px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
     }
 
     .bottom-nav {
@@ -43,6 +66,11 @@
       bottom: 0;
       left: 0;
       z-index: 10;
+      background: #3b82f6;
+      color: #ffffff;
+      padding: 8px 16px;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
     }
 
     .tabbar {
@@ -50,6 +78,10 @@
       top: 0;
       left: 0;
       z-index: 9;
+      background: #f9fafb;
+      padding: 8px 16px;
+      border-bottom: 1px solid #e5e7eb;
+      transition: background-color 0.3s ease;
     }
 
     .fab {
@@ -59,10 +91,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+
+    .fab:hover {
+      transform: scale(1.1);
+      background: #dc2626;
     }
 
     .toggle-checkbox:checked+.toggle-label {
-      background-color: #1976d2;
+      background-color: #3b82f6;
     }
 
     .toggle-checkbox:checked+.toggle-label::after {
@@ -76,17 +117,18 @@
       left: 2px;
       width: 20px;
       height: 20px;
-      background: white;
+      background: #ffffff;
       border-radius: 50%;
-      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease;
     }
 
     .delete-button {
       position: absolute;
       top: -10px;
       right: -10px;
-      background: red;
-      color: white;
+      background: #ef4444;
+      color: #ffffff;
       border-radius: 50%;
       width: 20px;
       height: 20px;
@@ -95,7 +137,15 @@
       justify-content: center;
       cursor: pointer;
       font-size: 12px;
+      font-weight: bold;
       z-index: 20;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .delete-button:hover {
+      background: #dc2626;
+      transform: scale(1.2);
     }
   </style>
 </head>
@@ -115,10 +165,7 @@
 
     const devices = [
       { name: 'iPhone 14', width: 375, height: 667 },
-      { name: 'iPhone 14 Pro', width: 390, height: 844 },
       { name: 'iPad Pro 11"', width: 834, height: 1194 },
-      { name: 'Pixel 6', width: 360, height: 640 },
-      { name: 'Galaxy S22', width: 360, height: 780 },
       { name: 'Custom', width: 375, height: 667 },
     ];
 
@@ -704,7 +751,7 @@
           socketRef.current.emit('changeDevice', { screenId: screen.id, device: selectedDevice });
         });
       };
-      //
+
       const generateDesignFromPrompt = async (prompt) => {
         try {
           const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -790,14 +837,14 @@
             });
           const base64Image = await toBase64(imageFile);
 
-          const response = await fetch('https://cors-anywhere.herokuapp.com/https://api.xai.com/v1/vision', {
+          const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer YOUR_XAI_API_KEY',
+              'Authorization': 'Bearer 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',
             },
             body: JSON.stringify({
-              model: 'grok-vision',
+              model: 'gpt-4',
               messages: [
                 {
                   role: 'system',
@@ -1174,8 +1221,6 @@
           { type: 'tabbar', label: 'Barra de Pestañas' },
         ];
         const [selectedComponent, setSelectedComponent] = useState(componentsList[0].type);
-        const [customWidth, setCustomWidth] = useState('');
-        const [customHeight, setCustomHeight] = useState('');
         const [prompt, setPrompt] = useState('');
         const [sketchImage, setSketchImage] = useState(null);
         const [sketchPreview, setSketchPreview] = useState(null);
@@ -1211,25 +1256,9 @@
           }
         };
 
-        const applyCustomDevice = () => {
-          const width = parseInt(customWidth);
-          const height = parseInt(customHeight);
-          if (width > 0 && height > 0) {
-            changeDevice('Custom', width, height);
-          } else {
-            alert('Por favor, ingresa un ancho y alto válidos.');
-          }
-        };
-
         return (
           <div className="sidebar p-4">
-            <h2 className="text-xl font-bold mb-4">Sala Actual</h2>
-            <button
-              onClick={handleExitRoom}
-              className="p-2 mb-4 bg-red-600 text-white rounded w-full hover:bg-red-700"
-            >
-              Volver a Selección de Sala
-            </button>
+
             <h2 className="text-xl font-bold mb-4">Diseño por Prompt</h2>
             <textarea
               value={prompt}
@@ -1282,7 +1311,35 @@
             >
               Añadir Componente
             </button>
-            <h2 className="text-xl font-bold mt-6 mb-4">Exportar</h2>
+
+          </div>
+        );
+      };
+
+      const RightSidebar = () => {
+        const [customWidth, setCustomWidth] = useState('');
+        const [customHeight, setCustomHeight] = useState('');
+
+        const applyCustomDevice = () => {
+          const width = parseInt(customWidth);
+          const height = parseInt(customHeight);
+          if (width > 0 && height > 0) {
+            changeDevice('Custom', width, height);
+          } else {
+            alert('Por favor, ingresa un ancho y alto válidos.');
+          }
+        };
+
+        return (
+          <div className="right-sidebar p-4">
+            <h2 className="text-xl font-bold mb-4">Sala Actual</h2>
+            <button
+              onClick={handleExitRoom}
+              className="p-2 mb-4 bg-red-600 text-white rounded w-full hover:bg-red-700"
+            >
+              Volver a Selección de Sala
+            </button>
+            <h2 className="text-xl font-bold mb-4">Exportar</h2>
             <button
               onClick={exportToFlutter}
               className="p-2 mb-2 bg-green-500 text-white rounded w-full"
@@ -1402,6 +1459,7 @@
               ))}
             </div>
           </div>
+          <RightSidebar />
         </div>
       );
     };

@@ -33,6 +33,22 @@ const pool = new Pool({
   password: 'grup022grup022*',
   port: 5432,
 });
+// PostgreSQL connection using environment variables
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL, // Use Render's DB URL from .env
+//   ssl: {
+//     rejectUnauthorized: false // Required for Render's SSL
+//   }
+// });
+
+// pool.connect((err) => {
+//   if (err) {
+//     console.error('Database connection error:', err.stack);
+//   } else {
+//     console.log('Connected to PostgreSQL database');
+//   }
+// });
+
 // Create tables if they don't exist
 async function initializeDatabase() {
   try {
